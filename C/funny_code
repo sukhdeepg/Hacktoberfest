@@ -1,0 +1,52 @@
+Some of my favourites (that made me laugh) :-
+
+Those related to C :
+
+1)if (result == true)
+    return true;
+else
+    return result;
+
+2)if (something == true)
+{
+    // do something;
+}
+
+3)int getRandom()
+{
+    return 4;
+}
+
+4)bool isLetter (char c)
+{
+    switch(c)
+    {
+        case 'a' : return 1; break;
+        case 'b' : return 1; break;
+        case 'c' : return 1; break;
+        case 'd' : return 1; break;
+        ....
+        ....
+        case 'z' : return 1; break;
+        default  : return 0;
+    }
+}
+
+5)#define TRUE FALSE  /* Happy debugging */
+
+6)#define NULL 42
+
+7)string s = "";
+s = "something";
+
+8)if (node != NULL)
+    return node;
+else
+    return NULL;
+
+9)int someClass::nextId ()
+{
+    int id = 0;
+    id = nextId;
+    return id;
+}
