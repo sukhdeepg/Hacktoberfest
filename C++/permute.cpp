@@ -1,4 +1,4 @@
-#program to generate all permutations of a given string using backtracking. 
+/*  program to generate all permutations of a given string using backtracking.  */
 
 #include <iostream> 
 #include <set>
