@@ -1,5 +1,4 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <stdio.h>
 #define ll long long int
 
 // calculates x power y mod m in O(logn) time
@@ -10,7 +9,7 @@ int binaryExp(ll x, ll y, ll m)
     while(y > 0)
     {
         if(y&1)
-            ans = (res*x)%m;
+            ans = (ans*x)%m;
         y = y>>1;
         x = (x*x)%m;
     }
@@ -22,6 +21,6 @@ int main()
     int y=100;
     int m=1e9+7;
 
-    cout<<binaryExp(x,y,m);
+    printf("%lli", binaryExp(x,y,m));
     return 0;
 }
