@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package cleave
 
 func Primes(n int) []int {
 	// make list
@@ -28,8 +26,4 @@ func Primes(n int) []int {
 
 	return returnSlice
 
-}
-
-func main() {
-	fmt.Println(Primes(30))
 }
