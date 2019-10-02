@@ -1,0 +1,18 @@
+lass Solution {
+public:
+    int hammingDistance(int x, int y) {
+        vector<char> s1;
+        int count=0,m;
+        int l=x^y;
+        
+       for(int i=l;i!=0;i=i/2){
+            m=i%2;
+            if(m==1){.
+                count+=1;
+            };
+        } 
+        //cout<<count;
+         
+        return count;
+    }
+};
