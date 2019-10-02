@@ -36,5 +36,3 @@ print(Fibonacci(100))
 > Commit your changes with an appropriate message.
 
 > [Create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
-
-## :star: it if you enjoyed contributing!
