@@ -8,8 +8,9 @@ filename = "highscore.txt"
 
 print("Your score was", your_score)
 
-all_scores = []
+# It is beautiful how everyone starts as a winner
 your_rank = 1
+all_scores = []
 
 # In case there are no other scores saved
 try:
