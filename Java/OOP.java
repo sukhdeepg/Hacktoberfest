@@ -51,7 +51,7 @@ public class pet{
 
     public static void main(String[] args) 
     { 
-        pet tuffy = new pet("tuffy","papillon", 5, "white"); 
-        System.out.println(tuffy.toString()); 
+        pet ronnie = new pet("ronnie","germanShepherd", 6, "brown"); 
+        System.out.println(ronnie.toString()); 
     } 
 } 
