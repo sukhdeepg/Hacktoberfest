@@ -1,5 +1,8 @@
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 ![Hacktoberfest 2019](https://img.shields.io/badge/Hacktoberfest-2019-purple)
+![GitHub Forks](https://img.shields.io/github/forks/sukhdeepg/Hacktoberfest?style=social)
+![GitHub Stars](https://img.shields.io/github/stars/sukhdeepg/Hacktoberfest?style=social)
+![GitHub Contributors](https://img.shields.io/github/contributors/sukhdeepg/Hacktoberfest?style=social)
 
 # Your Favorite Code Snippet
 Collection of code snippets that can be anything from _hello world_ to _Complex Algo & DS_ (In any programming language).
