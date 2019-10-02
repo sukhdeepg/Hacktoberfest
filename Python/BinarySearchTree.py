@@ -1,143 +1,47 @@
-from LinkedListQueue import queue
+# This is my favourite code snippet because it provides an effective way of searching
 
-
-class bst:
-    class _Node(object):
-        __slots__ = '_data', '_left', '_right'
-
-
-        def __init__(self, value, left = None, right = None):
-            self._data = value
-            self._left = left
-            self._right = right
-
-
+class node:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+    
+class tree:
     def __init__(self):
-        self._root = None
-        self._size = 0
+        self.root=None
 
-
-    def insert(self, value):
-        troot = self._root
-        ttroot = None
-        while troot:
-            ttroot = troot
-            if value < troot._data:
-                troot = troot._left
-            elif value > troot._data:
-                troot = troot._right
-        node = self._Node(value)
-        if self._root:
-            if value < ttroot._data:
-                ttroot._left = node
-            elif value > ttroot._data:
-                ttroot._right = node
-        else:
-            self._root = node
-
-
-    def recursive_insert(self, value, root):
-        if root == None:
-            node = self._Node(value)
-            return node
-        if root._data > value:
-            root._left = self.recursive_insert(value, root._left)
-        elif root._data < value:
-            root._right = self.recursive_insert(value, root._right)
-        return root
-
-
-    def search(self, value):
-        temp = self._root
-        while temp:
-            if value > temp._data:
-                temp = temp._right
-            elif value < temp._data:
-                temp = temp._left
+    def insert(self,val):
+        temp=node(val)
+        if self.root:
+            iter = self.root
+            while iter:
+                if iter.val<temp.val:
+                    if iter.right:
+                        iter=iter.right
+                    else:
+                        break
+                else:
+                    if iter.left:
+                        iter=iter.left
+                    else:
+                        break
+            if iter.val<temp.val:
+                iter.right=temp
             else:
-                return True
-        return False
+                iter.left=temp
+        else:
+            self.root=temp
 
+    def inorderPrint(self,r):
+        if r:
+            self.inorderPrint(r.left)
+            print(r.val)
+            self.inorderPrint(r.right)
 
-    def levelorder(self):
-        temp = self._root
-        q = queue()
-        print(temp._data, end=' ')
-        q.push(temp)
-        while not q.is_empty():
-            temp = q.pop()
-            if temp._left:
-                print(temp._left._data, end=' ')
-                q.push(temp._left)
-            if temp._right:
-                print(temp._right._data, end=' ')
-                q.push(temp._right)
+mTree = tree()
+print('Enter space seperated values to be inserted: ',end=' ')
+vals=list(map(int,input().split()))
 
-
-    def inorder(self, root):
-        if root:
-            self.inorder(root._left)
-            print(root._data, end=' ')
-            self.inorder(root._right)
-
-
-    def preorder(self, root):
-        if root:
-            print(root._data, end=' ')
-            self.preorder(root._left)
-            self.preorder(root._right)
-
-
-    def postorder(self, root):
-        if root:
-            self.postorder(root._left)
-            self.postorder(root._right)
-            print(root._data, end=' ')
-
-
-tree1 = bst()
-tree1._root = tree1.recursive_insert(50, None)
-tree1.recursive_insert(30, tree1._root)
-tree1.recursive_insert(10, tree1._root)
-tree1.recursive_insert(20, tree1._root)
-tree1.recursive_insert(70, tree1._root)
-tree1.recursive_insert(31, tree1._root)
-tree1.recursive_insert(39, tree1._root)
-
-print("-------------Tree1------------")
-print("Inorder", end='=')
-tree1.inorder(tree1._root)
-print()
-print("Preorder", end='=')
-tree1.preorder(tree1._root)
-print()
-print("Postorder", end='=')
-tree1.postorder(tree1._root)
-print()
-print("Levelorder", end='=')
-tree1.levelorder()
-print("\n")
-
-
-tree2 = bst()
-tree2.insert(50)
-tree2.insert(30)
-tree2.insert(10)
-tree2.insert(20)
-tree2.insert(70)
-tree2.insert(31)
-tree2.insert(39)
-
-
-print("-------------Tree2------------")
-print("Inorder", end='=')
-tree1.inorder(tree1._root)
-print()
-print("Preorder", end='=')
-tree1.preorder(tree1._root)
-print()
-print("Postorder", end='=')
-tree1.postorder(tree1._root)
-print()
-print("Levelorder", end='=')
-tree1.levelorder()
+for i in vals:
+    mTree.insert(i)
+mTree.inorderPrint(mTree.root)

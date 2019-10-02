@@ -1,38 +1,51 @@
-import numpy
-from LinkedListQueue import queue
-class Graph:
-    def __init__(self, vertices):
-        self._vertices = vertices
-        self._adjmatrix = numpy.zeros((vertices, vertices))
-        self._size = 0
-    def addEdge(self, u, v, w = 1):
-        self._adjmatrix[u][v] = w
-    def deleteEdge(self, u, v):
-        self._adjmatrix[u][v] = 0
-    def bfs(self, source):
-        i = source
-        q = queue()
-        q.push(source)
-        l = [0]*self._vertices
-        l[i] = 1
-        print(i, end= '->')
-        while not q.is_empty():
-            i = q.pop()
-            for j in range(self._vertices):
-                if self._adjmatrix[i][j] == 1 and l[j] == 0:
-                    print(j, end='->')
-                    q.push(j)
-                    l[j] = 1
-g = Graph(7)
-g.addEdge(0, 1)
-g.addEdge(0, 5)
-g.addEdge(0, 4)
-g.addEdge(0, 2)
-g.addEdge(2, 5)
-g.addEdge(2, 3)
-g.addEdge(6, 3)
-g.addEdge(1, 3)
-g.addEdge(6, 4)
-g.addEdge(1, 6)
-print(g._adjmatrix)
-g.bfs(0)
+class SimpleGraph:
+    def __init__(self):
+        self.edges = {}
+    
+    def neighbors(self, id):
+        return self.edges[id]
+
+
+import collections
+
+class Queue:
+    def __init__(self):
+        self.elements = collections.deque()
+    
+    def empty(self):
+        return len(self.elements) == 0
+    
+    def put(self, x):
+        self.elements.append(x)
+    
+    def get(self):
+        return self.elements.popleft()
+
+
+def breadth_first_search(graph, start):
+    # print out what we find
+    open_list = Queue()
+    open_list.put(start)
+    visited = {}
+    visited[start] = True
+    
+    while not open_list.empty():
+        current = open_list.get()
+        print("Visiting %r" % current)
+        for next in graph.neighbors(current):
+            if next not in visited:
+                open_list.put(next)
+                visited[next] = True
+
+
+
+if __name__ == '__main__':
+	example_graph = SimpleGraph()
+	example_graph.edges = {
+    	'A': ['B'],
+    	'B': ['A', 'C', 'D'],
+    	'C': ['A'],
+    	'D': ['E', 'A'],
+    	'E': ['B']
+	}
+	breadth_first_search(example_graph, 'A')
