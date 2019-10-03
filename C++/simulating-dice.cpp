@@ -11,7 +11,7 @@ int main()
     char ch='q';
     while(ch!='e')
     {
-        cout<<rand()%6;
+        cout<<rand()%7;
         cout<<'\t';
         cin>>ch;
     }
