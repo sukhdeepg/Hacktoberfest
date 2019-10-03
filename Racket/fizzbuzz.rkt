@@ -2,7 +2,7 @@
 
 ;; (fizzbuzz n) produces Fizz, Buzz, FizzBuzz or n
 ;; depending on the value of n.
-;; fizzbuzz: Num -> (Anyof Str Num)
+;; fizzbuzz: Num -> (anyof Str Num)
 ;; Examples:
 (check-expect (fizzbuzz 3) "Fizz")
 (check-expect (fizzbuzz 5) "Buzz")
