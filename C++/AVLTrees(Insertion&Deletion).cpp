@@ -1,3 +1,4 @@
+// This is my favorite code snippet because it is a balanced BST and i like balanced things
 #include <bits/stdc++.h>
 
 using namespace std;
