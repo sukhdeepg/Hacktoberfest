@@ -1,0 +1,464 @@
+//_______________________________________  TABLE MANIPULATION _______________________________________
+
+
+/*
+OVERVIEW:
+
+table.
+
+    sort()              - sorts table by given column
+
+    create()            - creates a table
+
+    remove()            - deletes a table
+
+    row.
+        getRows()       - gets all rows from a table
+        getRow()        - gets a row from an index
+        length()        - returns number of rows
+        delete()        - deletes a row
+        remove()        - synonym of delete()
+        add()           - adds a row from array
+        addObj()        - adds a row from object
+        replace()       - replaces contents of row with array
+        move()          - moves row to given index
+        getIndex()      - searches table for first substring match, returns index.
+        getIndexes()    - searches table for all substring matches, returns indexes.
+
+    cell.
+        add()           - adds a cell to given row
+        remove()        - removes a cell from given row
+        getContent()    - gets a cell's content from index
+        getIndex()      - searches row for first substring match, returns index.
+        getIndexes()    - searches row for all substring matches, returns indexes.
+        removeOne()     - removes a single cell
+        clearOne()      - clears a single cell
+        replaceOne()    - replaces contents of a cell with given string
+        removeAll()     - removes all cells from given index
+        clearAll()      - removes contents of all cells from given index
+
+ */
+
+
+
+
+const table = {
+    /**
+     * @method
+     * @desc table.sort() sorts a table's rows in alphabetical order based on the inner html.
+     * @param tableId {String} - Id of the table to sort.
+     * @param columnIndex {Number} - Index of column to sort by. I.e. 0 is the first column.
+     */
+    sort: function(tableId, columnIndex) {
+        let _table = document.getElementById(tableId);
+        let rows, looping, currEl, nextEl, shouldMove;
+        looping = true;
+
+        //Continues looping and sorting rows until there are no more rows to sort.
+        while (looping) {
+            let i;
+            looping = false;
+            rows = _table.rows;
+
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldMove = false;
+
+                // Compares element of current row's given column, to the element of next row's given column.
+                currEl = rows[i].getElementsByTagName("TD")[columnIndex];
+                nextEl = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+                // If the current element is larger than the next, breaks the loop and sets shouldMove to true.
+                if (currEl.innerHTML.toLowerCase() > nextEl.innerHTML.toLowerCase()) {
+                    shouldMove = true;
+                    break;
+                }
+            }
+            // Moves the current row.
+            if (shouldMove) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                looping = true;
+            }
+        }
+    },
+
+    /**
+     * @method
+     * @desc Creates a table with given rows, and appends it to given container ID
+     * @param containerId
+     * @param tableId
+     * @param headerArr
+     * @param rowsArrArr
+     */
+    create: function(containerId, tableId, headerArr, rowsArrArr) {
+        let _table = document.createElement('table');
+        _table.id = tableId;
+        let header = document.createElement('tr');
+        let columns = headerArr.length;
+        let rows = rowsArrArr.length;
+
+        // generates the headers
+        for (let i = 0; i < columns; i++) {
+            let th = document.createElement('th');
+            th.innerText = headerArr[i];
+            header.appendChild(th);
+        }
+
+        _table.appendChild(header);
+
+        // generates the rows
+        for (let i = 0; i < rows; i++) {
+            let tr = document.createElement('tr');
+
+            // generates the cells
+            for (let j = 0; j < columns; j++) {
+                let td = document.createElement('td');
+                td.innerText = rowsArrArr[i][j];
+                tr.appendChild(td);
+            }
+            _table.appendChild(tr);
+        }
+        let container = document.getElementById(containerId);
+        container.appendChild(_table);
+    },
+
+    /**
+     * @method
+     * @desc Deletes given table.
+     * @param tableId
+     */
+    remove: function(tableId) {
+        document.getElementById(tableId).outerHTML = "";
+    },
+
+    row: {
+
+
+        /**
+         * @function
+         * @desc Returns all rows of given table, excluding headers by default
+         * @param tableId
+         * @param includeHeader
+         * @returns {Array || HTMLCollectionOf<Element>}
+         */
+        getRows: function(tableId, includeHeader = false) {
+            let rows = document.getElementById(tableId).getElementsByTagName("tr");
+
+            if (!includeHeader) {
+                let returnRows = [];
+                for (let i = 0; i < rows.length; i++) {
+                    // adds current row if it doesn't include 'th'.
+                    if (!rows[i].querySelector('th')) returnRows.push(rows[i]);
+                }
+                // returns tbody rows
+                return returnRows;
+                // returns all rows
+            } else return rows;
+        },
+
+        /**
+         * @function
+         * @desc Returns row of given table at given index
+         * @param tableId
+         * @param rowIndex
+         * @param includeHeader
+         * @returns {*|Element}
+         */
+        getRow: function(tableId, rowIndex, includeHeader = false) {
+            return table.row.getRows(tableId, includeHeader)[rowIndex];
+        },
+
+        /**
+         * @function
+         * @desc Returns amount of rows
+         * @param tableId
+         * @returns {number}
+         */
+        length: function(tableId) {
+            return table.row.getRows(tableId).length;
+        },
+
+        /**
+         * @method
+         * @desc Deletes row at given index
+         * @param tableId
+         * @param rowIndex
+         */
+        delete: function(tableId, rowIndex) {
+            table.row.getRows(tableId)[rowIndex].outerHTML = "";
+        },
+
+        /**
+         * @method
+         * @desc synonym of table.row.delete
+         * @param tableId
+         * @param rowIndex
+         */
+        remove: function(tableId, rowIndex) {
+            table.row.delete(tableId, rowIndex);
+        },
+
+        /**
+         * @method
+         * @desc Adds a row with a cell for each of given array's entries.
+         * @param tableId
+         * @param arr
+         */
+        add: function(tableId, arr) {
+            let _table = document.getElementById(tableId);
+            let newRow = _table.insertRow();
+            for (let i = 0; i < arr.length; i++) {
+                newRow.insertCell(i).innerHTML = arr[i];
+            }
+        },
+
+        /**
+         * @method
+         * @desc Does the same as table.row.add, but rips the values from an object instead, regardless of keys.
+         * @param tableId
+         * @param object
+         */
+        addObj: function(tableId, object) {
+            table.row.add(tableId, Object.values(object))
+        },
+
+        /**
+         * @method
+         * @desc Replaces the data of given row with the data from rowArr.
+         * @param tableId
+         * @param rowIndex
+         * @param rowArr
+         */
+        replace: function(tableId, rowIndex, rowArr) {
+            table.row.delete(tableId, rowIndex);
+            table.row.add(tableId, rowArr);
+            table.row.move(tableId, table.row.getRows(tableId).length - 1, rowIndex);
+        },
+
+        /**
+         * @method
+         * @desc Moves row with given index, to new index.
+         * @param tableId
+         * @param rowToMove
+         * @param newRowIndex
+         */
+        move: function(tableId, rowToMove, newRowIndex) {
+            let _table = document.getElementById(tableId);
+            let rows = table.row.getRows(tableId);
+
+            let targetRow = rows[newRowIndex];
+            rowToMove = rows[rowToMove];
+
+            if (newRowIndex <= _table.length - 1) {
+                _table.insertBefore(rowToMove, targetRow.nextSibling); //n (newRowIndex->newRow)
+            } else {
+                _table.insertBefore(rowToMove, targetRow); //n (--||--)
+            }
+        },
+
+        /**
+         * @function
+         * @desc Searches through the table for a row that contains given string, and returns the first one it finds.
+         * @param tableId
+         * @param contains
+         * @returns {number}
+         */
+        getIndex: function(tableId, contains) {
+            for (let i = 0; i < document.getElementById(tableId).length; i++) {
+                if (document.getElementById(tableId)[i].includes(contains)) {
+                    return i;
+                }
+            } // can also use property <row element>.rowIndex to return index of a known element.
+        },
+
+        /**
+         * @function
+         * @desc Searches through the table for a row that contains given string, and returns the results in an array.
+         * (Kept separate for consistency, and personal taste.)
+         * @param tableId
+         * @param contains
+         * @returns {array}
+         */
+        getIndexes: function(tableId, contains) {
+            let returnArr = [];
+            for (let i = 0; i < document.getElementById(tableId).length; i++) {
+                if (document.getElementById(tableId)[i].includes(contains)) {
+                    returnArr.push(i);
+                }
+            } // can also use property <row element>.rowIndex to return index of a known element.
+            return returnArr;
+            // optionally, i could only use this and remove getIndex(), (or return a string if only one element was found, but that would be dumb)
+            // but due to personal taste i prefer this.
+        },
+
+    },
+
+    cell: {
+
+        /**
+         * @function
+         * @desc Returns an array with the data of each cell in given row.
+         * @param tableId
+         * @param rowIndex
+         * @returns {Array}
+         */
+        getContent: function(tableId, rowIndex) {
+            let cells = [];
+            let cellsEl = document.getElementById(tableId)[rowIndex];
+            for (let i = 0; i < cellsEl.length; i++) cells[i] = table.row.getRow[i].innerHTML;
+            return cells; //strings with contents inside the <th> tags.
+        },
+
+        /**
+         * @method
+         * @desc Adds a cell with given content to given row.
+         * @param tableId
+         * @param rowIndex
+         * @param string
+         * @param cellType (optional)
+         */
+        add: function(tableId, rowIndex, string, cellType = "td") { //, toIndex=table.row.getRow(tableId, rowIndex).length
+            let cells = table.row.getRow(tableId, rowIndex);
+            var newCell = document.createElement(cellType);
+            var newCellText = document.createTextNode(string);
+            newCell.appendChild(newCellText);
+            //console.log("-> CELL ADD : string='" + string + "', tableId=" + tableId + ", rowIndex=" + rowIndex);
+            cells.appendChild(newCell);
+        }, //fant ut senere at .insertCell() gjør omtrent det samme. Beholder funksjon for flexibility.
+
+        /**
+         * @method
+         * @desc moves the cell at index=prevIndex at row=rowIndex, to index=newIndex.
+         * @param tableId
+         * @param rowIndex
+         * @param cellToMove
+         * @param newCellIndex
+         * @param cellType
+         */
+        move: function(tableId, rowIndex, cellToMove, newCellIndex, cellType = "td") {
+            let cells = table.row.getRow(tableId, rowIndex).getElementsByTagName(cellType);
+            let movingCell = cells[cellToMove];
+
+            //console.log("-> CELL MOVE : prevIndex='" + prevIndex + "', newIndex=" + newIndex + " out of " + (cells.length - 1));
+            if (newCellIndex === cells.length) {
+                cells[newCellIndex].parentNode.insertBefore(movingCell, cells[newCellIndex].nextSibling);
+            } else {
+                cells[newCellIndex].parentNode.insertBefore(movingCell, cells[newCellIndex]);
+            }
+        },
+
+        /**
+         * @function
+         * @desc Searches through the given row for a cell that contains given string, and returns the first one it finds.
+         * (Kept separate for consistency, and personal taste.)
+         * @param tableId
+         * @param rowIndex
+         * @param contains
+         * @returns {number}
+         */
+        getIndex: function(tableId, rowIndex, contains) {
+            let row = table.row.getRow(tableId, rowIndex);
+            for (let i = 0; i < row.length; i++) {
+                if (row[i] === contains) {
+                    return i;
+                }
+            }
+        },
+
+        /**
+         * @function
+         * @desc Searches through the given row for a cell that contains given string, and returns the results in an array.
+         * @param tableId
+         * @param contains
+         * @returns {array}
+         */
+        getIndexes: function(tableId, rowIndex, contains) {
+            let returnArr = [];
+            let row = table.row.getRow(tableId, rowIndex);
+            for (let i = 0; i < row.length; i++) {
+                if (row[i] === contains) {
+                    returnArr.push(i);
+                }
+            }
+            return returnArr;
+        },
+
+        /**
+         * @method
+         * @desc Deletes the given cell at given row.
+         * @param tableId
+         * @param rowIndex
+         * @param index
+         */
+        removeOne: function(tableId, rowIndex, index) {
+            let cells = table.row.getRow(tableId, rowIndex);
+            cells[index].outerHTML = "";
+        }, // fant ut senere at .deleteCell() gjør det samme. Beholder funksjon for flexibility.'
+
+        /**
+         * @method
+         * @desc Deletes the contents of the given cell at given row.
+         * @param tableId
+         * @param rowIndex
+         * @param index
+         */
+        clearOne: function(tableId, rowIndex, index) {
+            let cells = table.row.getRow(tableId, rowIndex);
+            cells[index].innerHTML = "";
+        },
+
+        /**
+         * @method
+         * @desc Replaces the content of the given cell at given row, with given string.
+         * @param tableId
+         * @param rowIndex
+         * @param index
+         * @param string
+         */
+        replaceOne: function(tableId, rowIndex, index, string) {
+            let cells = table.row.getRow(tableId, rowIndex);
+            cells[index].innerHTML = string;
+        },
+
+        /**
+         * @method
+         * @desc Deletes each cell in a given row.
+         * @param tableId
+         * @param rowIndex
+         */
+        removeAll: function(tableId, rowIndex) {
+            let cells = table.row.getRow(tableId, rowIndex);
+            for (let i = 0; i < cells.length; i++) cells[i].outerHTML = "";
+        },
+
+        /**
+         * @method
+         * @desc Deletes the contents of each cell in a given row.
+         * @param tableId
+         * @param rowIndex
+         */
+        clearAll: function(tableId, rowIndex) {
+            let cells = table.row.getRow(tableId, rowIndex);
+            for (let i = 0; i < cells.length; i++) cells[i].innerHTML = "";
+        },
+    },
+
+};
+
+
+
+/* for example:
+var data1 = ["horse", "cat", "france", "robert"];
+var teams = [
+        {name: "liverpool", points: 5, rank: 1},
+        {name: "leeds", points: 1, rank: 3},
+        {name: "arsenal", points: 3, rank: 2},
+    ];
+    table.row.add("table1", data1);
+    table.cell.add("table1", 1, "roblox");
+    table.cell.add("table1", 0, "# of BEARS", "th");
+    table.cell.move("table1", 0, 1, "# of BEARS", "th");
+    table.cell.add("table1", 1, data1.indexOf("cat"));
+    table.cell.add("table1", 1, data1[2]);
+    table.row.addObj("table1", getObjByKey(teams, "name", "liverpool"));
+    table.row.addObj("table1", teams[2]);
+ */
