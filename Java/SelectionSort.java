@@ -8,7 +8,7 @@ public class SelectionSort {
     private int findSmallest(ArrayList<Integer> arr) {
         int smallest = arr.get(0);
         int smallest_index = 0;
-        
+
         for (int i = 1; i < arr.size(); i++) {
          if (arr.get(i) < smallest) {
              smallest = arr.get(i);
